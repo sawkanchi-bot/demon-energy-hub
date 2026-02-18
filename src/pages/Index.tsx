@@ -7,6 +7,7 @@ import { StatCard } from "@/components/StatCard";
 import { EvolutionPanel } from "@/components/EvolutionPanel";
 import { AnalyticsDrawer } from "@/components/AnalyticsDrawer";
 import { ParticleBackground } from "@/components/ParticleBackground";
+import { SvgBackground } from "@/components/SvgBackground";
 
 const DRAIN_RATES = { idle: 0.02, active: 0.08, combat: 0.2 };
 const MOONLIGHT_MULTIPLIER = 0.4;
@@ -103,6 +104,7 @@ const Index = () => {
         }),
       }}
     >
+      <SvgBackground moonlight={moonlightMode} energy={energy} />
       <ParticleBackground moonlight={moonlightMode} />
 
       {/* Vignette overlay — intensifies on critical energy */}
