@@ -302,11 +302,22 @@ export function Reactor({ energy, isRageMode, showWave, moonlightMode = false }:
           style={{ filter: `drop-shadow(0 0 8px hsl(${pinkHsl} / 0.8))` }}
         />
 
-        {/* Tick marks */}
+        {/* Tick marks with glow */}
+        <filter id="tickGlow">
+          <feGaussianBlur stdDeviation="1.2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
         {Array.from({ length: 36 }).map((_, i) => {
           const angle = (i * 10 * Math.PI) / 180;
-          const r1 = i % 9 === 0 ? 79 : 81;
-          const r2 = 84;
+          const isMajor = i % 9 === 0;
+          const r1 = isMajor ? 78 : 81;
+          const r2 = isMajor ? 86 : 85;
+          const tickColor = moonlightMode
+            ? isMajor ? "hsl(270, 70%, 75%)" : "hsl(270, 50%, 65%)"
+            : isMajor ? "hsl(330, 100%, 78%)" : "hsl(300, 60%, 65%)";
           return (
             <line
               key={i}
@@ -314,9 +325,11 @@ export function Reactor({ energy, isRageMode, showWave, moonlightMode = false }:
               y1={110 + r1 * Math.sin(angle)}
               x2={110 + r2 * Math.cos(angle)}
               y2={110 + r2 * Math.sin(angle)}
-              stroke={moonlightMode ? "hsl(270, 20%, 40%)" : "hsl(270, 20%, 30%)"}
-              strokeWidth={i % 9 === 0 ? 1.5 : 0.8}
-              opacity={i % 9 === 0 ? 0.7 : 0.25}
+              stroke={tickColor}
+              strokeWidth={isMajor ? 2 : 1.2}
+              opacity={isMajor ? 0.95 : 0.55}
+              strokeLinecap="round"
+              filter={isMajor ? "url(#tickGlow)" : undefined}
             />
           );
         })}
@@ -363,24 +376,37 @@ export function Reactor({ energy, isRageMode, showWave, moonlightMode = false }:
 
       {/* Energy text */}
       <div className="absolute flex flex-col items-center z-10">
-        <motion.span
-          className="text-3xl md:text-4xl font-display font-bold tracking-wider"
+        {/* Dark backdrop for contrast */}
+        <div
+          className="absolute rounded-full pointer-events-none"
           style={{
-            color: isRageMode ? "hsl(350, 90%, 68%)" : `hsl(${pinkSoftHsl})`,
+            width: 90,
+            height: 60,
+            background: "radial-gradient(ellipse, hsl(240, 15%, 4% / 0.75) 40%, transparent 80%)",
+            filter: "blur(6px)",
+          }}
+        />
+        <motion.span
+          className="relative text-4xl md:text-5xl font-display font-bold tracking-wider"
+          style={{
+            color: isRageMode ? "hsl(350, 100%, 82%)" : `hsl(${pinkSoftHsl})`,
             textShadow: isRageMode
-              ? "0 0 24px hsl(350, 80%, 55%)"
-              : `0 0 20px hsl(${pinkHsl} / 0.6)`,
+              ? "0 0 12px hsl(350, 90%, 70%), 0 0 30px hsl(350, 80%, 50%), 0 2px 4px hsl(0, 0%, 0% / 0.8)"
+              : `0 0 12px hsl(${pinkHsl}), 0 0 30px hsl(${pinkHsl} / 0.6), 0 2px 4px hsl(0, 0%, 0% / 0.8)`,
           }}
           key={Math.round(energy)}
-          initial={{ scale: 1.12, opacity: 0.7 }}
+          initial={{ scale: 1.1, opacity: 0.7 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
         >
           {Math.round(energy)}%
         </motion.span>
         <span
-          className="text-[10px] uppercase tracking-[0.3em] mt-1"
-          style={{ color: `hsl(${moonlightMode ? "270, 10%, 55%" : "270, 10%, 55%"})` }}
+          className="relative text-[10px] uppercase tracking-[0.3em] mt-1 font-display"
+          style={{
+            color: moonlightMode ? "hsl(270, 20%, 65%)" : "hsl(270, 10%, 60%)",
+            textShadow: "0 1px 4px hsl(0, 0%, 0% / 0.6)",
+          }}
         >
           Oni Energy
         </span>
