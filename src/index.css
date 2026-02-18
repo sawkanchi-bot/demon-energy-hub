@@ -144,9 +144,10 @@
 
   .nebula-bg {
     background: 
-      radial-gradient(ellipse 80% 60% at 50% 50%, hsl(270 40% 12% / 0.6), transparent),
-      radial-gradient(ellipse 60% 80% at 20% 80%, hsl(330 60% 15% / 0.3), transparent),
-      radial-gradient(ellipse 50% 50% at 80% 20%, hsl(260 50% 10% / 0.4), transparent),
+      radial-gradient(ellipse 70% 55% at 50% 50%, hsl(275 50% 15% / 0.75), transparent),
+      radial-gradient(ellipse 55% 70% at 18% 82%, hsl(330 70% 14% / 0.55), transparent),
+      radial-gradient(ellipse 50% 50% at 82% 18%, hsl(260 60% 11% / 0.6), transparent),
+      radial-gradient(ellipse 40% 35% at 50% 100%, hsl(290 40% 10% / 0.4), transparent),
       hsl(var(--demon-midnight));
   }
 
