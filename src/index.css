@@ -98,10 +98,9 @@
   .glow-card:hover {
     border-color: hsl(var(--demon-pink) / 0.3);
     box-shadow: 
-      0 0 30px -5px hsl(var(--demon-pink) / 0.15),
+      0 0 30px -5px hsl(var(--demon-pink) / 0.18),
       0 12px 40px -8px hsl(var(--demon-midnight) / 0.7),
       inset 0 1px 0 hsl(270 20% 22% / 0.4);
-    transform: translateY(-2px);
   }
 
   .btn-demon {
@@ -234,4 +233,38 @@
 
 .animate-flicker {
   animation: flicker 2s ease-in-out infinite;
+}
+
+/* Stability card pulse border for critical state */
+@keyframes pulse-border {
+  0%, 100% {
+    box-shadow:
+      0 0 20px -5px hsl(var(--demon-pink) / 0.08),
+      0 8px 32px -8px hsl(var(--demon-midnight) / 0.6),
+      inset 0 1px 0 hsl(270 20% 20% / 0.3);
+    border-color: hsl(var(--border));
+  }
+  50% {
+    box-shadow:
+      0 0 28px -4px hsl(350, 80%, 50% / 0.35),
+      0 8px 32px -8px hsl(var(--demon-midnight) / 0.6),
+      inset 0 1px 0 hsl(270 20% 20% / 0.3);
+    border-color: hsl(350, 80%, 50% / 0.45);
+  }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+/* Moonlight mode header toggle tactile feel */
+@keyframes moonlight-toggle {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.92); }
+  70% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.animate-moonlight-toggle {
+  animation: moonlight-toggle 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
