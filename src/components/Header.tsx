@@ -1,4 +1,4 @@
-import { Zap, Moon } from "lucide-react";
+import { Moon } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface HeaderProps {
@@ -16,14 +16,31 @@ export function Header({ moonlightMode, onToggleMoonlight, onOpenAnalytics }: He
       transition={{ duration: 0.5 }}
     >
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+        {/* Brand icon — pulsing reactor mark */}
+        <motion.div
+          className="w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden"
           style={{
-            background: "linear-gradient(135deg, hsl(330, 100%, 72%), hsl(270, 60%, 60%))",
-            boxShadow: "0 0 15px hsl(330, 100%, 72% / 0.3)",
+            background: "linear-gradient(135deg, hsl(var(--demon-pink)), hsl(270, 60%, 60%))",
+            boxShadow: moonlightMode
+              ? "0 0 16px hsl(270, 60%, 75% / 0.4)"
+              : "0 0 16px hsl(var(--demon-pink) / 0.35)",
           }}
+          animate={{ boxShadow: moonlightMode
+            ? ["0 0 12px hsl(270, 60%, 75% / 0.3)", "0 0 22px hsl(270, 60%, 75% / 0.55)", "0 0 12px hsl(270, 60%, 75% / 0.3)"]
+            : ["0 0 12px hsl(var(--demon-pink) / 0.3)", "0 0 22px hsl(var(--demon-pink) / 0.55)", "0 0 12px hsl(var(--demon-pink) / 0.3)"],
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Zap size={16} className="text-primary-foreground" />
-        </div>
+          {/* Inner plasma dot */}
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{
+              background: "radial-gradient(circle, hsl(330, 100%, 92%), hsl(330, 100%, 72%))",
+              boxShadow: "0 0 8px hsl(330, 100%, 80%)",
+            }}
+          />
+        </motion.div>
+
         <div>
           <h1 className="text-sm font-display font-bold uppercase tracking-[0.2em] text-gradient-pink">
             Demon Fuel
@@ -35,26 +52,63 @@ export function Header({ moonlightMode, onToggleMoonlight, onOpenAnalytics }: He
       </div>
 
       <div className="flex items-center gap-3">
-        <button
+        {/* Moonlight Mode toggle — tactile */}
+        <motion.button
           onClick={onToggleMoonlight}
-          className={`p-2.5 rounded-lg border transition-all duration-300 group relative ${
-            moonlightMode
-              ? "border-accent/40 bg-accent/10"
-              : "border-border hover:border-primary/30"
-          }`}
+          className="relative group"
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
           title="Moonlight Mode"
         >
-          <Moon
-            size={15}
-            className={`transition-colors ${
-              moonlightMode ? "text-accent" : "text-muted-foreground group-hover:text-primary/70"
-            }`}
-          />
-          {/* Tooltip */}
-          <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-display tracking-wider">
-            {moonlightMode ? "Moonlight On" : "Moonlight Off"}
-          </span>
-        </button>
+          <motion.div
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-400"
+            animate={{
+              borderColor: moonlightMode ? "hsl(270, 40%, 50% / 0.5)" : "hsl(var(--border))",
+              background: moonlightMode ? "hsl(270, 30%, 14%)" : "transparent",
+              boxShadow: moonlightMode
+                ? "0 0 16px -4px hsl(270, 60%, 70% / 0.3), inset 0 0 12px -4px hsl(270, 60%, 70% / 0.1)"
+                : "none",
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              animate={{ rotate: moonlightMode ? 0 : -30, scale: moonlightMode ? 1 : 0.85 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <Moon
+                size={13}
+                style={{
+                  color: moonlightMode ? "hsl(var(--accent))" : "hsl(var(--muted-foreground))",
+                  transition: "color 0.3s",
+                }}
+              />
+            </motion.div>
+            <span
+              className="text-[10px] font-display uppercase tracking-[0.15em] transition-colors duration-300"
+              style={{ color: moonlightMode ? "hsl(var(--accent))" : "hsl(var(--muted-foreground))" }}
+            >
+              {moonlightMode ? "Moonlight" : "Normal"}
+            </span>
+
+            {/* Toggle pill indicator */}
+            <div
+              className="w-7 h-3.5 rounded-full relative transition-all duration-300"
+              style={{
+                background: moonlightMode ? "hsl(270, 50%, 45%)" : "hsl(var(--secondary))",
+              }}
+            >
+              <motion.div
+                className="absolute top-0.5 w-2.5 h-2.5 rounded-full"
+                style={{
+                  background: moonlightMode ? "hsl(var(--accent))" : "hsl(var(--muted-foreground))",
+                  boxShadow: moonlightMode ? "0 0 6px hsl(270, 60%, 75%)" : "none",
+                }}
+                animate={{ x: moonlightMode ? 15 : 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            </div>
+          </motion.div>
+        </motion.button>
 
         <button
           onClick={onOpenAnalytics}

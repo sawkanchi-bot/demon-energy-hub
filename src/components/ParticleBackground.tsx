@@ -23,7 +23,7 @@ export function ParticleBackground({ moonlight = false }: { moonlight?: boolean 
 
     let animationId: number;
     const particles: Particle[] = [];
-    const particleCount = moonlight ? 25 : 15;
+    const particleCount = moonlight ? 18 : 10;
 
     const resize = () => {
       canvas.width = window.innerWidth;
